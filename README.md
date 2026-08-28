@@ -1,6 +1,6 @@
 # Dropyour — plugin Claude Code
 
-Publish AND operate micro-apps from your AI — no account, no API key, stable URL, EU-hosted.
+Publish AND operate micro-apps from your AI. No account, no API key. Stable URL, EU-hosted.
 
 ```
 claude plugin marketplace add dropyour/dropyour-plugin
