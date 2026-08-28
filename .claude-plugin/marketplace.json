@@ -1,0 +1,15 @@
+{
+  "name": "dropyour",
+  "owner": {
+    "name": "Dropyour",
+    "url": "https://dropyour.io"
+  },
+  "description": "Publish AND operate micro-apps from your AI — no account, no API key, stable URL, EU-hosted.",
+  "plugins": [
+    {
+      "name": "dropyour",
+      "source": "./",
+      "description": "Publish AND operate micro-apps from your AI — no account, no API key, stable URL, EU-hosted."
+    }
+  ]
+}
