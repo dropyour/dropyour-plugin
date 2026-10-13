@@ -1,6 +1,6 @@
 # Dropyour — plugin Claude Code
 
-Publish AND operate micro-apps from your AI. No account, no API key. Stable URL, EU-hosted.
+Publish micro-apps from your AI with no account; operate them as real apps. Data stored in the EU.
 
 ```
 claude plugin marketplace add dropyour/dropyour-plugin
@@ -18,9 +18,9 @@ authentification avant le premier octet.
 - **Faire grandir** en vraie app (palier 4) : code serveur, magasin interrogeable, horloge, secrets,
   visiteurs connectés, fichiers, temps réel.
 
-Hébergé en Europe. Export à tout moment, dépôt transférable : partir est un bouton, pas une négociation.
+Hébergé en Europe. Export à tout moment, et une app graduée peut être redéployée sur ton propre compte d'hébergement : partir n'est pas une négociation.
 
-## Les 20 outils
+## Les 34 outils
 
 | Outil | Ce qu'il fait |
 |---|---|
@@ -31,18 +31,32 @@ Hébergé en Europe. Export à tout moment, dépôt transférable : partir est u
 | `dropyour_secret_set` | Store a secret for an app |
 | `dropyour_secret_delete` | Delete an app secret |
 | `dropyour_logs` | Read an app's log |
+| `dropyour_egress_deny` | Cut an outbound domain for an app |
 | `dropyour_secrets_list` | List secret names |
 | `dropyour_graduate` | Graduate a drop into a real app |
+| `dropyour_import` | Import an existing app |
 | `dropyour_read_app_files` | Read a graduated app's files |
+| `dropyour_call` | Call one of my app's routes |
+| `dropyour_schedule` | Read, set, or trigger my app's clock |
 | `dropyour_status` | Check a drop's status |
 | `dropyour_read_content` | Read a drop's content |
 | `dropyour_read_data` | Read a drop's stored data |
 | `dropyour_write_data` | Write a drop's stored data |
 | `dropyour_list_versions` | List a drop's versions |
 | `dropyour_rollback` | Roll a drop back to a version |
+| `dropyour_milestone` | Set a milestone on a system of linked apps, and roll them all back to it |
 | `dropyour_records_summary` | Summarize an app's records |
 | `dropyour_records_list` | Query an app's records |
+| `dropyour_autonomy` | Set how much this app's agent may do alone |
+| `dropyour_link` | Link one app to another, and state what it relies on |
+| `dropyour_rotate_token` | Rotate a drop's management token |
+| `dropyour_patch` | Patch part of a drop |
+| `dropyour_app_tools` | Declare your app's MCP tools |
+| `dropyour_records_visibility` | Set who reads a collection |
+| `dropyour_records_write` | Write one row in the app store |
+| `dropyour_release` | Publish, verify, and roll back on failure |
 | `dropyour_delete` | Delete a drop |
+| `dropyour_delegate` | Share access to one of my apps |
 | `dropyour_list` | List my drops |
 
 ## Les skills

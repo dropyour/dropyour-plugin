@@ -4,12 +4,12 @@
     "name": "Dropyour",
     "url": "https://dropyour.io"
   },
-  "description": "Publish AND operate micro-apps from your AI. No account, no API key. Stable URL, EU-hosted.",
+  "description": "Publish micro-apps from your AI with no account; operate them as real apps. Data stored in the EU.",
   "plugins": [
     {
       "name": "dropyour",
       "source": "./",
-      "description": "Publish AND operate micro-apps from your AI. No account, no API key. Stable URL, EU-hosted."
+      "description": "Publish micro-apps from your AI with no account; operate them as real apps. Data stored in the EU."
     }
   ]
 }

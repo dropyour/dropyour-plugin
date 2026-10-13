@@ -1,7 +1,7 @@
 {
   "name": "dropyour",
-  "version": "1.4.0",
-  "description": "Publish AND operate micro-apps from your AI. No account, no API key. Stable URL, EU-hosted.",
+  "version": "1.5.0",
+  "description": "Publish micro-apps from your AI with no account; operate them as real apps. Data stored in the EU.",
   "author": {
     "name": "Dropyour",
     "url": "https://dropyour.io"

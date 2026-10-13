@@ -22,7 +22,20 @@ It exports a default object with two optional handlers:
   };
 
 `app` is the capability. It is the ONLY thing your code receives — there is no ambient access to
-the network, the platform, or another app. What is not listed below does not exist.
+the platform or to another app. What is not listed below does not exist. The one thing that is NOT
+reached through `app` is the outbound network, and it has its own rule:
+
+**Outbound network**: `fetch` works, but only toward hosts your code names LITERALLY. The list of
+reachable hosts is derived from the code you publish, so write `fetch("https://api.example.com/v1")`
+rather than assembling the URL from pieces — an assembled URL is invisible to that derivation and the
+call is refused with `egress_refused` / `hors_declaration`. Nothing is reachable by default, and that
+includes Dropyour's own API and other customers' apps, which stay refused even if you name them.
+If the API needs a key, bind it to that host with `dropyour_secret_set`: the platform attaches it at
+the boundary, and your code never holds it.
+
+**Calling another app of yours**: an app of the SAME account becomes reachable at
+`https://<its-id>.dropyour.site/...` once the owner links it with `dropyour_link`. The called app then
+sees `app.caller = { dropId }` of the caller, signed by the platform; any other request sees `null`.
 
 - **app.request** — the incoming `Request`, untouched. In `scheduled` it is synthetic.
 - **app.dropId** — your app's id — use it to build your own URLs instead of guessing them.
@@ -32,14 +45,17 @@ the network, the platform, or another app. What is not listed below does not exi
 - **app.records** — the queryable store: many documents in named collections. This is where real app data lives.
     - `app.records.list` — list a collection, with an optional `where` on ONE top-level field (`eq`/`lt`/`gt`), and a cursor.
     - `app.records.get` — read one document by id.
+    - `app.records.getMany` — read up to 100 documents by their ids in ONE call — returns what it found AND the ids that are missing, so a partial batch never reads as "they do not exist".
     - `app.records.stats` — counts per collection, without downloading the documents.
     - `app.records.put` — create or replace one document.
+    - `app.records.aggregate` — count, sum, avg, min or max over a collection WITHOUT downloading it. Also tells you how many rows it scanned, so you see the store's ceiling coming in your answers rather than in your bill.
     - `app.records.remove` — delete one document. Deleting an absent one is not an error.
 - **app.schedule** — your app's clock. Your `scheduled` handler re-arms it itself — there is no cron syntax.
-    - `app.schedule.next` — ask to be woken once, between 5 minutes and 30 days from now. Replaces any pending wake-up.
-    - `app.schedule.cancel` — drop the pending wake-up.
+    - `app.schedule.next` — ask to be woken once, between 5 minutes and 30 days from now. An optional second argument names the wake-up (up to 8 named ones per app); same name replaces, different names coexist. Without a name, replaces the default pending wake-up.
+    - `app.schedule.cancel` — drop the pending wake-up — the named one if you pass its name, the default one otherwise. In `scheduled`, read which wake-up rang from the `reveil` query parameter of `app.request.url`.
 - **app.log** — write a line your agent can read back later with `dropyour_logs`. Levels: info, warn, error.
 - **app.visitor** — who is signed in, or `null`. `id` is stable for this app only; `email` only if they agreed to share it.
+- **app.caller** — which of YOUR other apps is calling, as `{ dropId }`, or `null`. Set only when that app's server code calls this one through a link you ratified with `dropyour_link`; verified by the platform, it cannot be forged by a browser, the internet, or another app. Guard a route kept for your linked apps with `if (app.caller?.dropId !== "abcd1234") return new Response("forbidden", { status: 403 });`.
 - **app.files** — your app's file space. Serve files from YOUR routes — there is no public bucket URL.
     - `app.files.put` — write or replace a file.
     - `app.files.get` — read a file back, with its content type.
@@ -68,7 +84,20 @@ It exports a default object with two optional handlers:
   };
 
 `app` is the capability. It is the ONLY thing your code receives — there is no ambient access to
-the network, the platform, or another app. What is not listed below does not exist.
+the platform or to another app. What is not listed below does not exist. The one thing that is NOT
+reached through `app` is the outbound network, and it has its own rule:
+
+**Outbound network**: `fetch` works, but only toward hosts your code names LITERALLY. The list of
+reachable hosts is derived from the code you publish, so write `fetch("https://api.example.com/v1")`
+rather than assembling the URL from pieces — an assembled URL is invisible to that derivation and the
+call is refused with `egress_refused` / `hors_declaration`. Nothing is reachable by default, and that
+includes Dropyour's own API and other customers' apps, which stay refused even if you name them.
+If the API needs a key, bind it to that host with `dropyour_secret_set`: the platform attaches it at
+the boundary, and your code never holds it.
+
+**Calling another app of yours**: an app of the SAME account becomes reachable at
+`https://<its-id>.dropyour.site/...` once the owner links it with `dropyour_link`. The called app then
+sees `app.caller = { dropId }` of the caller, signed by the platform; any other request sees `null`.
 
 - **app.request** — the incoming `Request`, untouched. In `scheduled` it is synthetic.
 - **app.dropId** — your app's id — use it to build your own URLs instead of guessing them.
@@ -78,14 +107,17 @@ the network, the platform, or another app. What is not listed below does not exi
 - **app.records** — the queryable store: many documents in named collections. This is where real app data lives.
     - `app.records.list` — list a collection, with an optional `where` on ONE top-level field (`eq`/`lt`/`gt`), and a cursor.
     - `app.records.get` — read one document by id.
+    - `app.records.getMany` — read up to 100 documents by their ids in ONE call — returns what it found AND the ids that are missing, so a partial batch never reads as "they do not exist".
     - `app.records.stats` — counts per collection, without downloading the documents.
     - `app.records.put` — create or replace one document.
+    - `app.records.aggregate` — count, sum, avg, min or max over a collection WITHOUT downloading it. Also tells you how many rows it scanned, so you see the store's ceiling coming in your answers rather than in your bill.
     - `app.records.remove` — delete one document. Deleting an absent one is not an error.
 - **app.schedule** — your app's clock. Your `scheduled` handler re-arms it itself — there is no cron syntax.
-    - `app.schedule.next` — ask to be woken once, between 5 minutes and 30 days from now. Replaces any pending wake-up.
-    - `app.schedule.cancel` — drop the pending wake-up.
+    - `app.schedule.next` — ask to be woken once, between 5 minutes and 30 days from now. An optional second argument names the wake-up (up to 8 named ones per app); same name replaces, different names coexist. Without a name, replaces the default pending wake-up.
+    - `app.schedule.cancel` — drop the pending wake-up — the named one if you pass its name, the default one otherwise. In `scheduled`, read which wake-up rang from the `reveil` query parameter of `app.request.url`.
 - **app.log** — write a line your agent can read back later with `dropyour_logs`. Levels: info, warn, error.
 - **app.visitor** — who is signed in, or `null`. `id` is stable for this app only; `email` only if they agreed to share it.
+- **app.caller** — which of YOUR other apps is calling, as `{ dropId }`, or `null`. Set only when that app's server code calls this one through a link you ratified with `dropyour_link`; verified by the platform, it cannot be forged by a browser, the internet, or another app. Guard a route kept for your linked apps with `if (app.caller?.dropId !== "abcd1234") return new Response("forbidden", { status: 403 });`.
 - **app.files** — your app's file space. Serve files from YOUR routes — there is no public bucket URL.
     - `app.files.put` — write or replace a file.
     - `app.files.get` — read a file back, with its content type.
