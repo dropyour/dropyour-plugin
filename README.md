@@ -20,12 +20,13 @@ authentification avant le premier octet.
 
 Hébergé en Europe. Export à tout moment, et une app graduée peut être redéployée sur ton propre compte d'hébergement : partir n'est pas une négociation.
 
-## Les 34 outils
+## Les 35 outils
 
 | Outil | Ce qu'il fait |
 |---|---|
 | `dropyour_whoami` | Check my Dropyour tier |
 | `dropyour_publish` | Publish a new drop |
+| `dropyour_publish_system` | Publish a system of apps |
 | `dropyour_replace` | Replace a drop's content |
 | `dropyour_update_settings` | Change a drop's settings |
 | `dropyour_secret_set` | Store a secret for an app |
